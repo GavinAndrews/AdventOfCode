@@ -114,17 +114,24 @@ class DEC(parts: List<String>) : Instruction() {
     }
 }
 
+fun solve(fname:String, initRegisters:Map<String, Int>?=null) : Map<String, Int> {
 
-fun main(args: Array<String>) {
-    println("Day12")
+    registers.clear()
+    if (initRegisters != null) {
+        for (r in initRegisters) {
+            registers.put(r.key, r.value)
+        }
+    }
 
-//    val text = File("src/Day12/example.txt").readLines()
-    val text = File("src/Day12/input.txt").readLines()
+    memory.clear()
+    pc=0
+
+    val text = File(fname).readLines()
     for (s in text) {
         parseOp(s)
     }
 
-    registers.put("c", 1)
+//    registers.put("c", 1)
 
     // Memory is Loaded...
     while (pc< memory.size) {
@@ -136,6 +143,7 @@ fun main(args: Array<String>) {
 
     println("Final State: $registers")
 
+    return registers
 }
 
 
