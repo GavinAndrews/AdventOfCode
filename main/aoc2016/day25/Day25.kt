@@ -135,7 +135,7 @@ fun main(args: Array<String>) {
     println("Day25")
 
 //    val text = File("src/Day25/input.txt").readLines()
-    val text = File("src/Day25/bonus.txt").readLines()
+    val text = File("main/aoc2016/day25/bonus.txt").readLines()
     for (s in text) {
         parseOp(s)
     }
