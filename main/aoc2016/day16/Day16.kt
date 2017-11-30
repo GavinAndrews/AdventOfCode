@@ -1,47 +1,66 @@
 package aoc2016.day16
 
-//val initial = "10000"
-//val target = 20
+import java.util.*
 
-val initial = "10010000000110000"
-//val target = 272
-val target = 35651584
-
-
-fun main(args: Array<String>) {
-
-    var stuff = initial
-
-    while (stuff.length<target) {
-        stuff = grow(stuff)
-        println("Length: ${stuff.length}")
+fun growSet(bits: BitSet, hwm: Int): Int {
+    bits.clear(hwm)
+    val newHwm = hwm * 2 + 1
+    for (i in 0 until hwm) {
+        val b = bits.get(i)
+        if (b) {
+            bits.clear((newHwm - 1) - i)
+        } else {
+            bits.set((newHwm - 1) - i)
+        }
     }
-
-    // Trim to target
-    stuff = stuff.substring(0, target)
-
-    // println(stuff)
-    println(checksum(stuff))
+    return newHwm
 }
 
-fun grow(stuff: String): String {
-    var copy = ""
-
-    for (c in stuff.length-1 downTo 0) {
-        copy += if (stuff[c]=='0') "1" else "0"
+fun fromString(bitset: BitSet, s: String): Int {
+    s.forEachIndexed { index, c ->
+        run {
+            if (c == '1') bitset.set(index) else bitset.clear(index)
+        }
     }
-
-    return stuff+"0"+copy
+    return s.length
 }
 
-fun checksum(stuff: String) : String {
-    if (stuff.length % 2 != 0) return stuff
+fun solve(initial:String, target:Int) : String {
 
-    var result = ""
-    for (i in 0..stuff.length-1 step 2) {
-        val c1 = stuff[i]
-        val c2 = stuff[i+1]
-        result += if (c1==c2) "1" else "0"
+    val bits = BitSet()
+    var hwm = fromString(bits, initial)
+
+    while (hwm < target) {
+        hwm = growSet(bits, hwm)
     }
-    return checksum(result)
+
+    // Truncate to target
+    hwm = target
+
+    do {
+        hwm = squeeze(bits, hwm)
+    } while (hwm % 2 == 0)
+
+    return dumpSet(bits, hwm)
+}
+
+fun squeeze(bits: BitSet, hwm: Int): Int {
+    // Odd indicates cannot be squeezed
+    if (hwm % 2 != 0) return hwm
+    (0..hwm - 2 step 2).forEach { i ->
+        if (bits.get(i) == bits.get(i + 1)) {
+            bits.set(i / 2)
+        } else {
+            bits.clear(i / 2)
+        }
+    }
+    return hwm / 2
+}
+
+fun dumpSet(bits: BitSet, hwm: Int) : String {
+    var s = ""
+    for (i in 0 until hwm) {
+        s += if (bits.get(i)) "1" else "0"
+    }
+    return s
 }
