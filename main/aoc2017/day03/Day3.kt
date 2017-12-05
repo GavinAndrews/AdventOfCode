@@ -26,14 +26,13 @@ fun nextDirection(d:Direction):Direction {
     }
 }
 
-val memory : MutableMap<Position, Int> = mutableMapOf()
-val accumulators : MutableMap<Position, Int> = mutableMapOf()
-val inverse: MutableMap<Int, Position> = mutableMapOf()
 
 
-fun main(args: Array<String>) {
+fun solve(upperLimit: Int) : Pair<Position?, Int?> {
 
-    val upperLimit = 312051
+    val memory : MutableMap<Position, Int> = mutableMapOf()
+    val accumulators : MutableMap<Position, Int> = mutableMapOf()
+    val inverse: MutableMap<Int, Position> = mutableMapOf()
 
     var current = Position(0,0)
     var value = 1
@@ -58,7 +57,7 @@ fun main(args: Array<String>) {
         value++
         memory[current] = value
 
-        val calculateSum = calculateSum(current)
+        val calculateSum = calculateSum(accumulators, current)
         if ((calculateSum> upperLimit)&&(firstBigAccumulator==null)) {
             firstBigAccumulator = calculateSum
         }
@@ -66,17 +65,13 @@ fun main(args: Array<String>) {
         inverse[value] = current
     }
 
-    println("${inverse[1]} ${inverse[1]!!.distance()}")
-    println("${inverse[12]} ${inverse[12]!!.distance()}")
-    println("${inverse[23]} ${inverse[23]!!.distance()}")
-    println("${inverse[1024]} ${inverse[1024]!!.distance()}")
-    println("${inverse[312051]} ${inverse[312051]!!.distance()}")
-
     println(firstBigAccumulator)
     println("Done")
+
+    return Pair(inverse[upperLimit],firstBigAccumulator)
 }
 
-fun calculateSum(current: Position): Int {
+fun calculateSum(accumulators : MutableMap<Position, Int>, current: Position): Int {
 
     var total = 0
 
