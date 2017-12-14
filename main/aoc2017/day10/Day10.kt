@@ -82,13 +82,12 @@ fun solveFile(fname: String, n: Int, p: Part = Part.ONE): Any {
 
 fun solve(line: String, n: Int, p: Part = Part.ONE): Any {
 
-    var rounds = 1
-
-
+    val rounds : Int
     val ops: List<Int>
 
     if (p == Part.ONE) {
         ops = line.split(",").map { s -> s.toInt() }
+        rounds = 1
     } else {
         ops = line.map { c -> c.toInt() } + listOf(17, 31, 73, 47, 23)
         rounds = 64
