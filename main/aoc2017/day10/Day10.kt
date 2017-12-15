@@ -10,6 +10,12 @@ class HashString(private val n: Int) {
 
     var elements: MutableList<Int> = mutableListOf()
 
+    init {
+        for (i in 0 until n) {
+            elements.add(i)
+        }
+    }
+
     private fun adjOffset(position: Int, offset: Int): Int {
         var adjOffset = position + offset
         while (adjOffset < 0) adjOffset += n
@@ -36,7 +42,6 @@ class HashString(private val n: Int) {
         }
     }
 
-
     fun calculateHashString(): String {
         var hash = ""
 
@@ -57,21 +62,6 @@ class HashString(private val n: Int) {
     override fun toString(): String {
         return "HashString(elements=$elements)"
     }
-
-    init {
-        for (i in 0 until n) {
-            elements.add(i)
-        }
-    }
-
-
-}
-
-
-fun main(args: Array<String>) {
-
-    solveFile("main/aoc2017/day10/input.txt", 256, Part.TWO)
-//    solve("main/aoc2017/day10/input.txt", 256)
 }
 
 
